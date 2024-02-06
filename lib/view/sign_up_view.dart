@@ -1,9 +1,13 @@
 import 'package:demo_app/utils/colors.dart';
+import 'package:demo_app/view/otp_view.dart';
 import 'package:demo_app/view/widgets/custom_button_widget.dart';
 import 'package:demo_app/view/widgets/custom_textfield_widget.dart';
 import 'package:demo_app/view/widgets/gradient_circle_widget.dart';
 import 'package:demo_app/view/widgets/socialmedia_icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controller/auth_controller.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -13,7 +17,7 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  bool _isChecked = false;
+  final AuthController _controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -88,22 +92,26 @@ class _SignUpViewState extends State<SignUpView> {
                     children: [
                       SizedBox(height: h*0.05,),
                       CustomTextFieldWidget(
+                        controller: _controller.nameController,
                           icon: Icons.account_circle_outlined, hintText: "Full Name"),
                       CustomTextFieldWidget(
+                          controller: _controller.emailController,
                           icon: Icons.email_outlined, hintText: "Email"),
                       CustomTextFieldWidget(
+                          controller: _controller.passwordController,
                           icon: Icons.lock_outline, hintText: "Password"),
                       CustomTextFieldWidget(
+                          controller: _controller.confirmPasswordController,
                           icon: Icons.lock_outline, hintText: "Confirm Password"),
                       // SizedBox(height: 15,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Checkbox(
-                            value: _isChecked,
+                            value: _controller.agreeToPolicy.value,
                             onChanged: (value) {
                               setState(() {
-                                _isChecked = value!;
+                                _controller.agreeToPolicy.value = value!;
                               });
                             },
                           ),
@@ -126,7 +134,15 @@ class _SignUpViewState extends State<SignUpView> {
                         ],
                       ),
                       SizedBox(height:  30,),
-                      CustomButtonWidget(text: "Sign up"),
+                      _controller.loading.isTrue
+                          ?CircularProgressIndicator()
+                          :      CustomButtonWidget(text: "Sign up",onPress: (){
+                        if(_controller.agreeToPolicy.isTrue){
+                          _controller.register(context);
+                        }else{
+                          _controller.showToast(context, "Agree to Terms & Conditions");
+                        }
+                      }),
                       SizedBox(height:  20,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -136,21 +152,26 @@ class _SignUpViewState extends State<SignUpView> {
                           SocialMediaIconWidget(icon: Icons.apple,color: Colors.black,),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Already have an account?",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16
-                            ),),
-                          Text("  log in",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.lightBlue,
-                                fontSize: 18
-                            ),),
-                        ],
+                      InkWell(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Already have an account?",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16
+                              ),),
+                            Text("  log in",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.lightBlue,
+                                  fontSize: 18
+                              ),),
+                          ],
+                        ),
                       )
                     ],
                   ),

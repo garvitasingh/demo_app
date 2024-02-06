@@ -2,12 +2,12 @@ import 'package:demo_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
-  // final TextEditingController controller;
+  final TextEditingController controller;
   final IconData icon;
   final String hintText;
 
   CustomTextFieldWidget({
-    // required this.controller,
+    required this.controller,
     required this.icon,
     required this.hintText,
   });
@@ -32,7 +32,7 @@ class CustomTextFieldWidget extends StatelessWidget {
         color: Colors.white,
       ),
       child: TextField(
-        // controller: controller,
+        controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(

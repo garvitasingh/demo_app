@@ -5,9 +5,19 @@ import 'package:demo_app/view/widgets/custom_textfield_widget.dart';
 import 'package:demo_app/view/widgets/gradient_circle_widget.dart';
 import 'package:demo_app/view/widgets/socialmedia_icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SignInView extends StatelessWidget {
+import '../controller/auth_controller.dart';
+
+class SignInView extends StatefulWidget {
   const SignInView({super.key});
+
+  @override
+  State<SignInView> createState() => _SignInViewState();
+}
+
+class _SignInViewState extends State<SignInView> {
+  final AuthController _controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +81,10 @@ class SignInView extends StatelessWidget {
                     children: [
                       SizedBox(height: h*0.15,),
                       CustomTextFieldWidget(
+                        controller: _controller.emailController,
                           icon: Icons.email_outlined, hintText: "Email"),
                       CustomTextFieldWidget(
+                        controller: _controller.passwordController,
                           icon: Icons.lock_outline, hintText: "Password"),
                       SizedBox(height: 15,),
                       Align(
@@ -85,7 +97,7 @@ class SignInView extends StatelessWidget {
                         ),),
                       ),
                       SizedBox(height:  60,),
-                      CustomButtonWidget(text: "Sign in"),
+                      CustomButtonWidget(text: "Sign in",onPress: (){}),
                       SizedBox(height:  20,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
